@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPXVIF_Dk5lR8MrlpA8Pu8DuYW07dcF5sBpw&s" type="image/png">
+    <title>Tính Thuế FC Online</title>
+    <style>
+        :root {
+            --primary-color: #09ac6d;
+            --primary-dark: #068f5a;
+            --bg-color: #f0f2f5;
+            --text-color: #1f2937;
+            --white: #ffffff;
+            --border-color: #d1d5db;
+            --shadow-glow: 0 0 0 3px rgba(9, 172, 109, 0.15);
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .calculator-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+
+        .header {
+            background: linear-gradient(270deg, var(--primary-color), var(--primary-dark), #2ecc71, var(--primary-color));
+            background-size: 400% 400%; /* Phóng to background để có thể di chuyển */
+            animation: gradientHeader 6s ease infinite; /* Animation chạy trong 6s và lặp lại vô tận */
+            
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        @keyframes gradientHeader {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 20px; 
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .body-content {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #4b5563;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 16px; 
+            font-weight: 600;
+            box-sizing: border-box;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: #f9fafb;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary-color);
+            background-color: #fff;
+            outline: none;
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-1px);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .coupon-group {
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            flex: 1;
+            min-width: fit-content;
+        }
+
+        .coupon-group .radio-option {
+            flex: 1 1 30%; 
+        }
+
+        .radio-option input {
+            display: none;
+        }
+
+        .radio-option label {
+            display: block;
+            text-align: center;
+            padding: 10px 5px;
+            background: #f3f4f6;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            font-size: 13px;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        .radio-option label:hover {
+            background-color: #e5e7eb;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .radio-option input:checked + label {
+            background: #e6fffa;
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 700;
+            transform: scale(1.02);
+            box-shadow: 0 2px 8px rgba(9, 172, 109, 0.15);
+        }
+
+        .result-section {
+            background-color: #fafafa;
+            border-top: 2px dashed #e5e7eb;
+            padding: 20px 25px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            align-items: center;
+        }
+
+        .text-red { color: #dc2626; }
+        .text-green { color: #059669; }
+        .text-gray { color: #6b7280; }
+        
+        .divider {
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 15px 0;
+        }
+
+        .final-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, #ecfdf5, #d1fae5);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #d1fae5;
+            margin-top: 15px;
+        }
+
+        .final-label {
+            font-size: 15px;
+            font-weight: 700;
+            color: #065f46;
+        }
+
+        .final-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator-card">
+    <div class="header">
+        <h2>Tính Thuế FC Online</h2>
+    </div>
+
+    <div class="body-content">
+        <div class="form-group">
+            <label>Giá bán cầu thủ (BP)</label>
+            <input type="text" id="price" placeholder="Nhập giá bán..." oninput="handleInput(this)" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+            <label>Ưu đãi</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" name="membership" id="mem_none" value="0" checked onchange="calculate()">
+                    <label for="mem_none">Thường</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" name="membership" id="mem_vip" value="0.1" onchange="calculate()">
+                    <label for="mem_vip">VIP (10%)</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" name="membership" id="mem_svip" value="0.3" onchange="calculate()">
+                    <label for="mem_svip">SVIP (30%)</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Phiếu giảm giá</label>
+            <div class="radio-group coupon-group">
+                <div class="radio-option">
+                    <input type="radio" name="coupon" id="cp_0" value="0" checked onchange="calculate()">
+                    <label for="cp_0">Không</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" name="coupon" id="cp_10" value="0.1" onchange="calculate()">
+                    <label for="cp_10">10%</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" name="coupon" id="cp_20" value="0.2" onchange="calculate()">
+                    <label for="cp_20">20%</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" name="coupon" id="cp_30" value="0.3" onchange="calculate()">
+                    <label for="cp_30">30%</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" name="coupon" id="cp_35" value="0.35" onchange="calculate()">
+                    <label for="cp_35">35%</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" name="coupon" id="cp_40" value="0.4" onchange="calculate()">
+                    <label for="cp_40">40%</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="result-section">
+        <div class="result-row">
+            <span class="text-gray">Giá bán cầu thủ:</span>
+            <strong id="display-price">0 BP</strong>
+        </div>
+        <div class="result-row">
+            <span class="text-red">Phí chuyển nhượng (40%):</span>
+            <strong class="text-red" id="display-fee">-0 BP</strong>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="result-row">
+            <span class="text-green">Hoàn tiền VIP/SVIP:</span>
+            <span class="text-green" id="display-vip">+0 BP</span>
+        </div>
+        <div class="result-row">
+            <span class="text-green">Hoàn tiền phiếu giảm giá:</span>
+            <span class="text-green" id="display-coupon">+0 BP</span>
+        </div>
+
+        <div class="final-row">
+            <span class="final-label">THỰC NHẬN:</span>
+            <span class="final-value" id="display-final">0 BP</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentFinalValue = 0;
+
+    function handleInput(input) {
+        let value = input.value.replace(/[^0-9]/g, '');
+        if (value) {
+            value = parseInt(value).toLocaleString('en-US');
+        }
+        input.value = value;
+        calculate();
+    }
+
+    function calculate() {
+        const rawPrice = document.getElementById('price').value.replace(/,/g, '');
+        const price = parseFloat(rawPrice);
+
+        if (isNaN(price) || price <= 0) {
+            updateDisplay(0, 0, 0, 0, 0);
+            return;
+        }
+
+        const membershipRate = parseFloat(document.querySelector('input[name="membership"]:checked').value);
+        const couponRate = parseFloat(document.querySelector('input[name="coupon"]:checked').value);
+
+        const baseFee = price * 0.4;          
+        const baseReceive = price - baseFee;  
+        
+        const vipRefund = baseFee * membershipRate; 
+        const couponRefund = baseFee * couponRate;   
+
+        const finalAmount = baseReceive + vipRefund + couponRefund;
+
+        updateDisplay(price, baseFee, vipRefund, couponRefund, finalAmount);
+    }
+
+    function updateDisplay(price, baseFee, vipRefund, couponRefund, finalAmount) {
+        document.getElementById('display-price').innerText = price.toLocaleString('en-US') + ' BP';
+        document.getElementById('display-fee').innerText = '-' + baseFee.toLocaleString('en-US') + ' BP';
+        document.getElementById('display-vip').innerText = '+' + vipRefund.toLocaleString('en-US') + ' BP';
+        document.getElementById('display-coupon').innerText = '+' + couponRefund.toLocaleString('en-US') + ' BP';
+
+        const finalEl = document.getElementById('display-final');
+        animateValue(finalEl, currentFinalValue, finalAmount, 500); 
+        
+        currentFinalValue = finalAmount;
+    }
+
+    function animateValue(obj, start, end, duration) {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const currentVal = Math.floor(start + (end - start) * easeOutQuart);
+            obj.innerHTML = currentVal.toLocaleString('en-US') + ' BP';
+            
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            } else {
+                 obj.innerHTML = end.toLocaleString('en-US') + ' BP';
+            }
+        };
+        window.requestAnimationFrame(step);
+    }
+</script>
+
+</body>
+</html>
